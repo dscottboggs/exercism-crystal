@@ -1,18 +1,16 @@
 require "spec"
 require "../src/*"
-
+{% if flag? :run_all_pending %}
+{% verbatim do %}
+macro pending(text, &block)
+  it {{text}} {{block.id}}
+end
+{% end %}
+{% end %}
 describe <%= "#{describe_name.inspect} do" %>
-  {% begin %}
-  {% pending = if flag? :RUN_ALL_TESTS
-                 :it
-               else
-                 :pending
-               end
-  %}
 <%- test_cases.each_with_index do |test_case, index| %>
   <%= test_case.pending?(index) %> "<%= test_case.test_name %>" do
     <%= test_case.workload %>
   end
 <% end -%>
-  {% end %}
 end

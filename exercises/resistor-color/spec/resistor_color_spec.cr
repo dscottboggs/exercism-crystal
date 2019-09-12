@@ -1,29 +1,26 @@
 require "spec"
 require "../src/*"
-
+{% if flag? :run_all_pending %}
+{% verbatim do %}
+macro pending(text, &block)
+  it {{text}} {{block.id}}
+end
+{% end %}
+{% end %}
 describe "ResistorColor" do
-  {% begin %}
-  {% pending = if flag? :RUN_ALL_TESTS
-                 :it
-               else
-                 :pending
-               end
-  %}
-
   it "Black" do
     ResistorColor.color_code("black").should eq(0)
   end
 
-  {{pending.id}} "White" do
+  pending "White" do
     ResistorColor.color_code("white").should eq(9)
   end
 
-  {{pending.id}} "Orange" do
+  pending "Orange" do
     ResistorColor.color_code("orange").should eq(3)
   end
 
-  {{pending.id}} "Colors" do
+  pending "Colors" do
     ResistorColor.colors.should eq(["black", "brown", "red", "orange", "yellow", "green", "blue", "violet", "grey", "white"])
   end
-  {% end %}
 end

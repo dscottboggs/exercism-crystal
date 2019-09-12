@@ -20,14 +20,7 @@ G_SRCS := $(shell find $(GENERATORDIR) -name "*.cr" -or -name "*.tt" | grep -Ev 
 test-exercise:
 	@echo "running formatting check for: $(EXERCISE)"
 	@crystal tool format --check $(EXERCISESDIR)/$(EXERCISE)
-	@echo "moving files around"
-	@sed 's/pending/it/g' $(EXERCISESPECDIR)/$(SPECFILE) > $(EXERCISESPECDIR)/$(TMPSPECFILE)
-	@mv $(EXERCISESPECDIR)/$(SPECFILE) $(EXERCISESPECDIR)/$(SUPERSPECFILE)
-	@mv $(EXERCISESPECDIR)/$(TMPSPECFILE) $(EXERCISESPECDIR)/$(SPECFILE)
-	@echo "running tests for: $(EXERCISE)"
-	@cd $(EXERCISESDIR)/$(EXERCISE) && crystal spec
-	@rm $(EXERCISESPECDIR)/$(SPECFILE)
-	@mv $(EXERCISESPECDIR)/$(SUPERSPECFILE) $(EXERCISESPECDIR)/$(SPECFILE)
+	@cd $(EXERCISESDIR)/$(EXERCISE) && crystal spec -D run_all_pending
 	@printf "\n"
 
 test-exercises:

@@ -1,35 +1,32 @@
 require "spec"
 require "../src/*"
-
+{% if flag? :run_all_pending %}
+{% verbatim do %}
+macro pending(text, &block)
+  it {{text}} {{block.id}}
+end
+{% end %}
+{% end %}
 describe "NthPrime" do
-  {% begin %}
-  {% pending = if flag? :RUN_ALL_TESTS
-                 :it
-               else
-                 :pending
-               end
-  %}
-
   it "first prime" do
     NthPrime.prime(1).should eq(2)
   end
 
-  {{pending.id}} "second prime" do
+  pending "second prime" do
     NthPrime.prime(2).should eq(3)
   end
 
-  {{pending.id}} "sixth prime" do
+  pending "sixth prime" do
     NthPrime.prime(6).should eq(13)
   end
 
-  {{pending.id}} "big prime" do
+  pending "big prime" do
     NthPrime.prime(10001).should eq(104743)
   end
 
-  {{pending.id}} "there is no zeroth prime" do
+  pending "there is no zeroth prime" do
     expect_raises(ArgumentError) do
       NthPrime.prime(0)
     end
   end
-  {% end %}
 end

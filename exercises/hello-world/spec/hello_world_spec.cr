@@ -1,17 +1,14 @@
 require "spec"
 require "../src/*"
-
+{% if flag? :run_all_pending %}
+{% verbatim do %}
+macro pending(text, &block)
+  it {{text}} {{block.id}}
+end
+{% end %}
+{% end %}
 describe "HelloWorld" do
-  {% begin %}
-  {% pending = if flag? :RUN_ALL_TESTS
-                 :it
-               else
-                 :pending
-               end
-  %}
-
   it "Say Hi!" do
     HelloWorld.hello.should eq("Hello, World!")
   end
-  {% end %}
 end

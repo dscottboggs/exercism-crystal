@@ -1,57 +1,54 @@
 require "spec"
 require "../src/*"
-
+{% if flag? :run_all_pending %}
+{% verbatim do %}
+macro pending(text, &block)
+  it {{text}} {{block.id}}
+end
+{% end %}
+{% end %}
 describe "Hamming" do
-  {% begin %}
-  {% pending = if flag? :RUN_ALL_TESTS
-                 :it
-               else
-                 :pending
-               end
-  %}
-
   it "empty strands" do
     Hamming.distance("", "").should eq(0)
   end
 
-  {{pending.id}} "single letter identical strands" do
+  pending "single letter identical strands" do
     Hamming.distance("A", "A").should eq(0)
   end
 
-  {{pending.id}} "single letter different strands" do
+  pending "single letter different strands" do
     Hamming.distance("G", "T").should eq(1)
   end
 
-  {{pending.id}} "long identical strands" do
+  pending "long identical strands" do
     Hamming.distance("GGACTGAAATCTG", "GGACTGAAATCTG").should eq(0)
   end
 
-  {{pending.id}} "long different strands" do
+  pending "long different strands" do
     Hamming.distance("GGACGGATTCTG", "AGGACGGATTCT").should eq(9)
   end
 
-  {{pending.id}} "disallow first strand longer" do
+  pending "disallow first strand longer" do
     expect_raises(ArgumentError) do
       Hamming.distance("AATG", "AAA")
     end
   end
 
-  {{pending.id}} "disallow second strand longer" do
+  pending "disallow second strand longer" do
     expect_raises(ArgumentError) do
       Hamming.distance("ATA", "AGTG")
     end
   end
 
-  {{pending.id}} "disallow left empty strand" do
+  pending "disallow left empty strand" do
     expect_raises(ArgumentError) do
       Hamming.distance("", "G")
     end
   end
 
-  {{pending.id}} "disallow right empty strand" do
+  pending "disallow right empty strand" do
     expect_raises(ArgumentError) do
       Hamming.distance("G", "")
     end
   end
-  {% end %}
 end

@@ -1,41 +1,38 @@
 require "spec"
 require "../src/*"
-
+{% if flag? :run_all_pending %}
+{% verbatim do %}
+macro pending(text, &block)
+  it {{text}} {{block.id}}
+end
+{% end %}
+{% end %}
 describe "CollatzConjecture" do
-  {% begin %}
-  {% pending = if flag? :RUN_ALL_TESTS
-                 :it
-               else
-                 :pending
-               end
-  %}
-
   it "zero steps for one" do
     CollatzConjecture.steps(1).should eq(0)
   end
 
-  {{pending.id}} "divide if even" do
+  pending "divide if even" do
     CollatzConjecture.steps(16).should eq(4)
   end
 
-  {{pending.id}} "even and odd steps" do
+  pending "even and odd steps" do
     CollatzConjecture.steps(12).should eq(9)
   end
 
-  {{pending.id}} "large number of even and odd steps" do
+  pending "large number of even and odd steps" do
     CollatzConjecture.steps(1000000).should eq(152)
   end
 
-  {{pending.id}} "zero is an error" do
+  pending "zero is an error" do
     expect_raises(ArgumentError) do
       CollatzConjecture.steps(0)
     end
   end
 
-  {{pending.id}} "negative value is an error" do
+  pending "negative value is an error" do
     expect_raises(ArgumentError) do
       CollatzConjecture.steps(-15)
     end
   end
-  {% end %}
 end
